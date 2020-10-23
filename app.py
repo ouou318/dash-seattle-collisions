@@ -14,7 +14,7 @@ app = dash.Dash(
     __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
 )
 server = app.server
-
+#port = int(os.environ.get('PORT', 5000))
 
 # Plotly mapbox public token
 mapbox_access_token = "pk.eyJ1Ijoib3VvdTMxOCIsImEiOiJja2dsdmRzN3AxZTc5MnNuc3I5aGJsY2tpIn0.jNeOlxQa-dF3UwLES1qrew"
