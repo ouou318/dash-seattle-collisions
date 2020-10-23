@@ -65,7 +65,9 @@ list_of_locations = {
 # totalList1 = np.array(totalList1)
 
 
-df = pd.read_csv("assets/Collisions.csv")
+df1 = pd.read_csv("assets/Collisions_1.csv")
+df2 = pd.read_csv("assets/Collisions_2.csv")
+df = df1.append(df2)
 df.INCDTTM = pd.to_datetime(df.INCDTTM)
 df["Date/Time"] = pd.to_datetime(df["INCDTTM"], format="%Y-%m-%d %H")
 df.index = df["Date/Time"]
