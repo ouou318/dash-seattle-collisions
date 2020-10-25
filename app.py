@@ -14,60 +14,17 @@ app = dash.Dash(
     __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
 )
 server = app.server
-#port = int(os.environ.get('PORT', 5000))
 
 # Plotly mapbox public token
 mapbox_access_token = "pk.eyJ1Ijoib3VvdTMxOCIsImEiOiJja2dsdmRzN3AxZTc5MnNuc3I5aGJsY2tpIn0.jNeOlxQa-dF3UwLES1qrew"
 
-# Dictionary of important locations in New York
-# list_of_locations = {
-#     "Madison Square Garden": {"lat": 40.7505, "lon": -73.9934},
-#     "Yankee Stadium": {"lat": 40.8296, "lon": -73.9262},
-#     "Empire State Building": {"lat": 40.7484, "lon": -73.9857},
-#     "New York Stock Exchange": {"lat": 40.7069, "lon": -74.0113},
-#     "JFK Airport": {"lat": 40.644987, "lon": -73.785607},
-#     "Grand Central Station": {"lat": 40.7527, "lon": -73.9772},
-#     "Times Square": {"lat": 40.7589, "lon": -73.9851},
-#     "Columbia University": {"lat": 40.8075, "lon": -73.9626},
-#     "United Nations HQ": {"lat": 40.7489, "lon": -73.9680},
-# }
-
 list_of_locations = {
-    "spot1": {"lon": -122.332653, "lat": 47.708655},
-    "spot2": {"lon": -122.344896, "lat": 47.717173},
+    "spot1": {"lon": -122.334695, "lat": 47.539893},
+    "spot2": {"lon": -122.351134, "lat": 47.570942},
     "spot3": {"lon": -122.328079, "lat": 47.604161},
-    "spot4": {"lon": -122.344997, "lat": 47.725036},
+    "spot4": {"lon": -122.334666, "lat": 47.609685},
 }
 
-# # Initialize data frame
-# df1 = pd.read_csv(
-#     "https://raw.githubusercontent.com/plotly/datasets/master/uber-rides-data1.csv",
-#     dtype=object,
-# )
-# df2 = pd.read_csv(
-#     "https://raw.githubusercontent.com/plotly/datasets/master/uber-rides-data2.csv",
-#     dtype=object,
-# )
-# df3 = pd.read_csv(
-#     "https://raw.githubusercontent.com/plotly/datasets/master/uber-rides-data3.csv",
-#     dtype=object,
-# )
-# df = pd.concat([df1, df2, df3], axis=0)
-# df["Date/Time"] = pd.to_datetime(df["Date/Time"], format="%Y-%m-%d %H:%M")
-# df.index = df["Date/Time"]
-# df.drop("Date/Time", 1, inplace=True)
-# totalList1 = []
-# for month in df.groupby(df.index.month):
-#     dailyList = []
-#     for day in month[1].groupby(month[1].index.day):
-#         dailyList.append(day[1])
-#     totalList1.append(dailyList)
-# totalList1 = np.array(totalList1)
-
-
-# df1 = pd.read_csv("assets/Collisions_1.csv")
-# df2 = pd.read_csv("assets/Collisions_2.csv")
-# df = df1.append(df2)
 df = pd.read_csv("assets/Collisions_test.csv")
 df.INCDTTM = pd.to_datetime(df.INCDTTM)
 df["Date/Time"] = pd.to_datetime(df["INCDTTM"], format="%Y-%m-%d %H")
@@ -85,10 +42,6 @@ for month in df.groupby(df.index.month):
     totalList.append(dailyList)
 totalList = np.array(totalList)
 
-import pdb
-# pdb.set_trace()
-
-
 # Layout of Dash App
 app.layout = html.Div(
     children=[
@@ -104,18 +57,28 @@ app.layout = html.Div(
                         ),
                         html.H2("Seattle Collisions APP"),
                         html.P(
-                            """Select different days using the date picker or by selecting
-                            different time frames on the histogram."""
+                            """
+                            In 2015, Seattle government launched Vision Zero
+                            and planned to end traffic deaths and serious injuries on city streets
+                            by 2030. This is an interactive tool that tracks the progress of this
+                            initiative and shares knowledge with the public.
+                            """
+                        ),
+                        html.P(
+                            """
+                            Select different days using the date picker or by selecting
+                            different time frames on the histogram.
+                            """
                         ),
                         html.Div(
                             className="div-for-dropdown",
                             children=[
                                 dcc.DatePickerSingle(
                                     id="date-picker",
-                                    min_date_allowed=dt(2014, 4, 1),
-                                    max_date_allowed=dt(2014, 9, 30),
-                                    initial_visible_month=dt(2014, 4, 1),
-                                    date=dt(2014, 4, 1).date(),
+                                    min_date_allowed=dt(2019, 4, 1),
+                                    max_date_allowed=dt(2020, 7, 14),
+                                    initial_visible_month=dt(2020, 1, 1),
+                                    date=dt(2020, 1, 1).date(),
                                     display_format="MMMM D, YYYY",
                                     style={"border": "0px solid black"},
                                 )
@@ -164,6 +127,7 @@ app.layout = html.Div(
                         html.P(id="date-value"),
                         dcc.Markdown(
                             children=[
+                                "Analysis: [Github](https://github.com/ouou318/data-incubator/blob/main/Final%20Presentation%20.ipynb)",
                                 "Source: [Seattle Gov](https://data-seattlecitygis.opendata.arcgis.com/datasets/collisions)"
                             ]
                         ),
@@ -190,10 +154,14 @@ app.layout = html.Div(
 
 # Gets the amount of days in the specified month
 # Index represents month (0 is April, 1 is May, ... etc.)
-daysInMonth = [30, 31, 30, 31, 31, 30]
+daysInMonth = [30, 31, 30, 31, 31, 30, 31, 30, 31, 31, 29, 31, 30, 31, 30, 31]
 
 # Get index for the specified month in the dataframe
-monthIndex = pd.Index(["Apr", "May", "June", "July", "Aug", "Sept"])
+monthIndex = pd.Index([
+    "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar",
+    "Apr", "May", "June", "July"
+])
+
 
 # Get the amount of rides per hour based on the time selected
 # This also higlights the color of the histogram bars based on
@@ -268,7 +236,7 @@ def update_selected_data(clickData):
 @app.callback(Output("total-rides", "children"), [Input("date-picker", "date")])
 def update_total_rides(datePicked):
     date_picked = dt.strptime(datePicked, "%Y-%m-%d")
-    return "Total Number of rides: {:,d}".format(
+    return "Total number of accidents: {:,d}".format(
         len(totalList[date_picked.month - 4][date_picked.day - 1])
     )
 
@@ -291,7 +259,7 @@ def update_total_rides_selection(datePicked, selection):
                     == int(x)
                 ]
             )
-        firstOutput = "Total rides in selection: {:,d}".format(totalInSelection)
+        firstOutput = "Total accidents in selection: {:,d}".format(totalInSelection)
 
     if (
         datePicked is None
