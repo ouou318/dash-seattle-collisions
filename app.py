@@ -128,7 +128,8 @@ app.layout = html.Div(
                         dcc.Markdown(
                             children=[
                                 "Analysis: [Github](https://github.com/ouou318/data-incubator/blob/main/Final%20Presentation%20.ipynb)",
-                                "Source: [Seattle Gov](https://data-seattlecitygis.opendata.arcgis.com/datasets/collisions)"
+                                "Source: [Seattle Gov](https://data-seattlecitygis.opendata.arcgis.com/datasets/collisions)",
+                                "Template Credit to [Dash](https://dash-gallery.plotly.host/dash-uber-rides-demo/)"
                             ]
                         ),
                     ],
